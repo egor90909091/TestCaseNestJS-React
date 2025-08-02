@@ -16,7 +16,7 @@ Backend работает на порту **5001**, frontend — на порту 
 
 ## Запуск проекта
 
-### Запуск backend с Docker Compose
+### Запуск 
 ```bash
 
 cd backend
