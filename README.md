@@ -21,8 +21,10 @@ Backend работает на порту **5001**, frontend — на порту 
 
 cd backend
 docker compose up dev-db -d
+npm install
 npx prisma migrate deploy
 npm run start:dev               
 
 cd frontend
+npm install
 npm start
