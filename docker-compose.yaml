@@ -1,0 +1,48 @@
+services:
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile.prod
+    ports:
+      - "5001:5001"
+    env_file:
+      - ./Backend/.env
+    environment:
+      - DATABASE_URL=postgresql://postgres:123@dev-db:5432/nest?schema=public
+    depends_on:
+      - dev-db
+    networks:
+      - netTestCaseNest
+    volumes:
+      - ./Backend/prisma:/app/prisma:ro
+    command: sh -c "npx prisma migrate deploy && npx prisma db seed && node dist/main"
+
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile.prod
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - netTestCaseNest
+
+  dev-db:
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: nest
+    networks:
+      - netTestCaseNest
+    volumes:
+      - pddata:/var/lib/postgresql/data
+
+volumes:
+  pddata:
+
+networks:
+  netTestCaseNest: {}
